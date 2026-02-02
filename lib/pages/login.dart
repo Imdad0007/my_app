@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:app/composants/colors.dart';
 import 'package:app/composants/text_field.dart';
+import 'package:app/pages/main_navigation_bar.dart';
+import 'package:app/composants/button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,142 +12,95 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const MainNavigationBar()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.dark,
-      ),
-      
-      child: Scaffold(
-        body: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SafeArea(
-                child: SingleChildScrollView(
-                  // pour éviter les problèmes de clavier
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 60), // Espacement depuis le haut
+    return Scaffold(
+      // backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Logo
+                  Image.asset('assets/img/attendance.png', height: 120),
 
-                      Center(
-                        child: Image.asset(
-                          // Meilleure approche pour les images
-                          'assets/img/university.png',
-                          height: 100,
-                          width: 100,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.school,
-                                size: 100, color: Colors.grey);
-                          },
-                        ),
-                      ),
+                  const SizedBox(height: 40),
 
-                      const SizedBox(height: 30),
-
-                      const Text(
-                        'Connexion',
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-
-                      const SizedBox(height: 40),
-
-                      const Textfield(
-                        hintText: "Nom d'utilisateur",
-                        obscureText: false,
-                        icon: Icons.person_outline,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      const Textfield(
-                        hintText: "Mot de passe",
-                        obscureText: true,
-                        icon: Icons.lock_outline,
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                //print('Forgot password pressed');
-                              },
-                              child: const Text(
-                                'Mot de passe oublié ?',
-                                style: TextStyle(
-                                  color: Color(
-                                      0xFF8E2DE2), // Utilisez votre couleur violette
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          elevation: 10,
-                          shadowColor: const Color(0xFF8E2DE2).withAlpha(76),
-                        ),
-                        child: RepaintBoundary(
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color(0xFF8E2DE2),
-                                  Color(0xFF4A00E0),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(16),
-                              child: const Center(
-                                child: Text(
-                                  'Se connecter',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 50), // Espacement en bas
-                    ],
+                  // Titre
+                  const Text(
+                    'Connexion',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 32,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
+
+                  const SizedBox(height: 40),
+
+                  // Champs de saisie
+                  Textfield(
+                    controller: _usernameController,
+                    hintText: "Nom d'utilisateur",
+                    obscureText: false,
+                    icon: Icons.person_outline,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Textfield(
+                    controller: _passwordController,
+                    hintText: "Mot de passe",
+                    obscureText: true,
+                    icon: Icons.lock_outline,
+                  ),
+
+                  // Mot de passe oublié
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Mot de passe oublié ?',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Bouton de connexion
+                  Button(label: "Se connecter", onPressed: _handleLogin),
+
+                  const SizedBox(height: 20),
+                ],
               ),
             ),
           ),

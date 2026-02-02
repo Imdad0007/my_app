@@ -1,21 +1,21 @@
-#ifndef FLUTTER_MY_APPLICATION_H_
-#define FLUTTER_MY_APPLICATION_H_
+#ifndef FLUTTER_attendanceLICATION_H_
+#define FLUTTER_attendanceLICATION_H_
 
 #include <gtk/gtk.h>
 
 G_DECLARE_FINAL_TYPE(MyApplication,
-                     my_application,
+                     attendancelication,
                      MY,
                      APPLICATION,
                      GtkApplication)
 
 /**
- * my_application_new:
+ * attendancelication_new:
  *
  * Creates a new Flutter-based application.
  *
  * Returns: a new #MyApplication.
  */
-MyApplication* my_application_new();
+MyApplication* attendancelication_new();
 
-#endif  // FLUTTER_MY_APPLICATION_H_
+#endif  // FLUTTER_attendanceLICATION_H_

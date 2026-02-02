@@ -1,95 +1,113 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:app/composants/nav_item.dart';
-import 'package:app/departements/accounting.dart';
-import 'package:app/departements/software.dart';
-import 'package:app/departements/trading.dart';
-import 'package:app/departements/presence.dart';
-import 'package:app/pages/login.dart';
+import 'package:app/composants/colors.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final VoidCallback onStartCall; // Callback pour changer d'onglet
+
+  const HomePage({super.key, required this.onStartCall});
+
+  final String surveillantNom = "Basile Le Grand";
+
+  String get todayDate {
+    final now = DateTime.now();
+    final date = DateFormat("EEEE d MMMM y", "fr_FR").format(now);
+    return date
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> navItems = [
-      {'imagePath': 'assets/img/login.png', 'title': 'Login', 'destination': const LoginPage()},
-      {'imagePath': 'assets/img/accounting.png', 'title': 'Accounting', 'destination': const Accounting()},
-      {'imagePath': 'assets/img/trading.png', 'title': 'Trading', 'destination': const Trading()},
-      {'imagePath': 'assets/img/software.png', 'title': 'Software', 'destination': const Software()},
-    ];
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 20),
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
-      ),
-
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Attendance's App",
-            style: TextStyle(
-              fontSize: 28,
-              fontFamily: 'Squid',
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          Center(
+            child: Text(
+            "Aujourd’hui : $todayDate",
+            style: const TextStyle(
+              color: Color.fromARGB(255, 125, 125, 125),
+              fontSize: 18,
             ),
           ),
-          centerTitle: true,
-
-          leading: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Image.asset("assets/img/arrow.png", width: 25, height: 25),
           ),
+
+          const SizedBox(height: 90),
+          Center(
+            child: const Text("Bienvenue,", style: TextStyle(fontSize: 25)),
+          ),
+          const SizedBox(height: 10),
           
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset("assets/img/settings.png", width: 40, height: 40),
-            ),
-          ],
-
-          backgroundColor: const Color.fromARGB(140, 20, 6, 211),
-        ),
-
-        body: Container(
-          color: const Color.fromARGB(60, 20, 6, 211),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              int crossAxisCount;
-              if (constraints.maxWidth > 1200) {
-                crossAxisCount = 5;
-              } else if (constraints.maxWidth > 800) {
-                crossAxisCount = 4;
-              } else if (constraints.maxWidth > 600) {
-                crossAxisCount = 3;
-              } else {
-                crossAxisCount = 2;
-              }
-
-              return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1, 
-                ),
-                padding: const EdgeInsets.all(20),
-                itemCount: navItems.length,
-                itemBuilder: (context, index) {
-                  final item = navItems[index];
-                  return NavItem(
-                    imagePath: item['imagePath'],
-                    title: item['title'],
-                    destination: item['destination'],
-                  );
-                },
-              );
-            },
+          Center(
+            child: Text(
+            "M/Mme. $surveillantNom",
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
-        ),
+          ),
+
+          const SizedBox(height: 40),
+
+          const SizedBox(height: 16),
+
+          Center(
+            child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: GestureDetector(
+              onTap:
+                  onStartCall, // Déclenche le changement d'onglet vers Presence
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 24,
+                    horizontal: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: AppColors.secondaryGradient,
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          "Démarrer l’appel",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          )
+        ],
       ),
     );
   }

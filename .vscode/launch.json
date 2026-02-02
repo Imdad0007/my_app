@@ -6,18 +6,18 @@
     "configurations": [
     
         {
-            "name": "my_app",
+            "name": "attendance",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "my_app (profile mode)",
+            "name": "attendance (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "my_app (release mode)",
+            "name": "attendance (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
